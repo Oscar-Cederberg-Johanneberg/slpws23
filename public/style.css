@@ -1,0 +1,581 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+background-color: #1e383c;
+}
+
+p {
+    color: #f6f8fa;
+    font-family: 'Rubik', sans-serif;
+    font-weight: lighter;
+    font-size: 85%;
+}
+
+h1 {
+    color: #f6f8fa;
+    font-size: 2rem;
+    font-family: 'Lora', serif;
+}
+
+h2 {
+    color: #c3ccd3;
+    font-family: 'Lora', serif;
+    font-size: 1.5625rem;
+}
+
+h3 {
+    color: #f6f8fa;
+    font-size: 1.5625rem;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #8ea6b2;
+    grid-area: na;
+}
+
+#nav-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 80vh;
+    background-color: #1e383c;
+    position: absolute;
+    top: -80vh;
+    width: 200px;
+    list-style: none;
+    transition: all 0.5s;
+}
+
+.nav-active {
+    transform: translateY(100vh);
+}
+
+#nav-links a {
+    text-decoration: none;
+    color: #f6f8fa;
+    letter-spacing: 0.1875rem;
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    width: 200px;
+    height: 3rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#nav-links a:hover {
+    background-color: #47646f;
+    transition: ease 0.4s;
+}
+
+.burger_line {
+    width: 25px;
+    height: 3px;
+    background-color:#1e383c;
+    margin: 0.3rem;
+    border-radius: 10%;
+    transition: all 0.5s;
+}
+
+.crossed_line #line_2 {
+    opacity: 0;
+}
+
+.crossed_line #line_1 {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.crossed_line #line_3 {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+#burger {
+    margin-right: 5.46875rem;
+    cursor: pointer;
+}
+
+#grid_wrapper {
+    display: grid;
+    grid-template-columns: minmax(200px, 1fr) 200px;
+    grid-template-rows: 20vh 1fr;
+    grid-template-areas: "he na" "ss ss";
+}
+
+header {
+    grid-area: he;
+    background-color: #8ea6b2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#club_name{
+    color: #1e383c;
+    text-align: center;
+}
+
+#center_start{
+    grid-area: ss;
+    display: flex;
+    justify-content: center;
+}
+
+#img_startsida {
+    height: auto;
+    width: 80vw;
+}
+
+#start_section{
+    display: flex;
+    flex-direction: column; 
+    align-items:center;
+    justify-content: space-evenly;
+    background-color: #47646f;
+    width: 90vw;
+}
+
+.start_text{
+    margin-top: 2rem;
+    margin-right: 4rem;
+    margin-left: 4rem;
+    text-align: center;
+}
+
+.start_text2 {
+    margin-bottom: 2.5rem;
+}
+
+#center_pieces{
+    grid-area: ss;
+    display: flex;
+    justify-content: center;
+}
+#pieces_wrapper {
+    display: grid;
+    width: 90vw;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(6,200px);
+    grid-template-areas: "kb kt" "qb qt" "rb rt" "bb bt" "hb ht" "pb pt";
+}
+
+#king_bild {
+    grid-area: kb;
+    margin-bottom: 0.15625rem;
+}
+
+#king_text {
+    grid-area: kt;
+    margin-bottom: 0.15625rem;
+}
+
+#queen_bild {
+    grid-area: qb;
+    background-color: #47646f;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#queen_text {
+    grid-area: qt;
+    background-color: #47646f;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#rook_bild {
+    grid-area: rb;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#rook_text {
+    grid-area: rt;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#bishop_bild {
+    grid-area: bb;
+    background-color: #47646f;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#bishop_text {
+    grid-area: bt;
+    background-color: #47646f;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#horse_bild {
+    grid-area: hb;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#horse_text {
+    grid-area: ht;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#pawn_bild {
+    grid-area: pb;
+    background-color: #47646f;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+#pawn_text {
+    grid-area: pt;
+    background-color: #47646f;
+    margin-bottom: 0.15625rem;
+    margin-top: 0.15625rem;
+}
+
+.pieces {
+    background-color: #788c96;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-right: 1.5rem;
+}
+
+.pieces_bilder {
+    height: 80%;
+    width: auto;
+}
+
+#center_strategier{
+    grid-area: ss;
+    display: flex;
+    justify-content: center;
+}
+
+#strategier_wrapper {
+    display: grid;
+    margin: 1.25rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 70px 200px 70px 200px 70px 200px;
+    grid-template-areas: "op op" "bo to" "mg mg" "tm bm" "eg eg" "be te";
+}
+
+.rubriker_stratergier {
+    color: #1e383c;
+}
+
+#openings {
+    grid-area: op;
+    background-color: #8ea6b2;
+}
+
+#bild_opening {
+    grid-area: bo;
+    margin-bottom: 1.25rem;
+    background-color: #47646f;
+}
+
+.strategier_bilder {
+    height: 20vw;
+    width: auto;
+    margin-bottom: 1.25rem;
+}
+
+#text_opening {
+    grid-area: to;
+    margin-bottom: 1.25rem;
+    background-color: #47646f;
+}
+
+#mid_game {
+    grid-area: mg;
+    background-color: #8ea6b2;
+    
+}
+
+#bild_mid {
+    grid-area: bm;
+    margin-bottom: 1.25rem;
+    background-color: #47646f;
+}
+
+#text_mid {
+    grid-area: tm;
+    margin-bottom: 1.25rem;
+    background-color: #47646f;
+}
+
+#end_game {
+    grid-area: eg;
+    background-color: #8ea6b2;
+}
+
+#bild_end {
+    grid-area: be;
+    background-color: #47646f;
+}
+
+#text_end {
+    grid-area: te;
+    background-color: #47646f;
+}
+
+.strategier {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#center_om_oss{
+    grid-area: ss;
+    display: flex;
+    justify-content: center;
+}
+
+#om_oss_section{
+    display: flex;
+    flex-direction: column; 
+    align-items:center;
+    justify-content: space-evenly;
+    background-color: #47646f;
+    width: 90vw;
+}
+
+#img_om_oss {
+    height: auto;
+    width: 80vw;
+}
+
+.om_oss_titel{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.om_oss_text{
+    margin-right: 4rem;
+    margin-left: 4rem;
+    text-align: center;
+}
+
+#social_medias {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 1rem;
+}
+
+.social_medias {
+    margin-left: 30px;
+    margin-right: 30px;
+    
+}
+.social_media_logo {
+    height: 10vh;
+    width: auto;
+}
+
+@media screen and (min-width: 800px) {
+    
+    p{
+        font-size: 1.25rem;
+    }
+
+    #burger {
+        display: none;
+    }
+    #grid_wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 100px 1fr;
+        grid-template-areas: 
+        "he"  
+        "ss";
+    }
+    #nav-links {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        height: 80px;
+        background-color: #1e383c;
+        position: absolute;
+        top: 100px;
+        width: 100vw;
+    }
+
+    #start_section{
+        display: flex;
+        flex-direction: column; 
+        align-items:center;
+        justify-content: space-evenly;
+        width: 80vw;
+        margin-top: 6.25rem;
+    }
+
+    .start_text{
+        margin-top: 2rem;
+        margin-right: 8rem;
+        margin-left: 8rem;
+        text-align: center;
+    }
+
+    .start_text2 {
+        margin-bottom: 2.5rem;
+    }
+
+    #img_startsida {
+        margin-top: 1.25rem;
+        width: 70vw;
+        height: auto;
+    }
+    .nav-active {
+        transform: none;
+    }
+    #pieces_wrapper {
+        display: grid;
+        width: 80vw;
+        margin-top: 5rem;
+        margin-bottom: 1.25rem;
+        grid-template-columns: 200px 1fr 200px 1fr;
+        grid-template-rows: 300px 300px 300px;
+        grid-template-areas: "kb kt qb qt" "rb rt bb bt" "hb ht pb pt";
+    }
+
+    #king_bild {
+        grid-area: kb;
+        margin-bottom: 0.3125rem;
+    }
+    
+    #king_text {
+        grid-area: kt;
+        margin-right: 0.3125rem;
+        margin-bottom: 0.3125rem;
+    }
+
+    #queen_bild {
+        grid-area: qb;
+        margin-left: 0.3125rem;
+        margin-bottom: 0.3125rem;
+        margin-top: 0rem;
+    }
+    
+    #queen_text {
+        grid-area: qt;
+        margin-bottom: 0.3125rem;
+        margin-top: 0rem;
+    }
+
+    #rook_bild {
+        grid-area: rb;
+        background-color: #47646f;
+        margin-bottom: 0.3125rem;
+        margin-top: 0.3125rem;
+    }
+    
+    #rook_text {
+        grid-area: rt;
+        background-color: #47646f;
+        margin-right: 0.3125rem;
+        margin-bottom: 0.3125rem;
+        margin-top: 0.3125rem;
+    }
+    
+    #bishop_bild {
+        grid-area: bb;
+        background-color: #788c96;
+        margin-left: 0.3125rem;
+        margin-bottom: 0.3125rem;
+        margin-top: 0.3125rem;
+    }
+    
+    #bishop_text {
+        grid-area: bt;
+        background-color: #788c96;
+        margin-bottom: 0.3125rem;
+        margin-top: 0.3125rem;
+    }
+    
+    #horse_bild {
+        grid-area: hb;
+        margin-bottom: 0.625rem;
+        margin-top: 0.3125rem;
+    }
+
+    #horse_text {
+        grid-area: ht;
+        margin-right: 0.3125rem;
+        margin-bottom: 0.625rem;
+        margin-top: 0.3125rem;
+    } 
+
+    #pawn_bild {
+        grid-area: pb;
+        margin-left: 0.3125rem;
+        margin-bottom: 0.625rem;
+        margin-top: 0.3125rem;
+    }
+    
+    #pawn_text {
+        grid-area: pt;
+        margin-bottom: 0.625rem;
+        margin-top: 0.3125rem;
+    }
+
+    .center_the_pieces_wrapper {
+        display: flex;
+        justify-content: center;
+    }
+    
+    #strategier_wrapper {
+        display: grid;
+        width: 80vw;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 80px 500px 80px 500px 80px 500px;
+        grid-template-areas: "op op" "bo to" "mg mg" "bm tm" "eg eg" "be te";
+        margin-top: 6.25rem;
+    }
+
+    #openings {
+        grid-area: op;
+    }
+
+    #om_oss_section{
+        width: 80vw;
+        margin-top: 6.25rem;
+    }
+
+    #img_om_oss {
+        margin-top: 1.25rem;
+        width: 70vw;
+        height: auto;
+    }
+
+    .om_oss_text{
+    margin-right: 8rem;
+    margin-left: 8rem;
+    }
+
+}
+
+@media screen and (min-width: 1100px){
+    #img_startsida {
+        width: 770px;
+    }
+
+    #img_om_oss{
+        width: 770px;
+    }
+}
