@@ -5,5 +5,12 @@ require 'sqlite3'
 require 'bcrypt'
 
 get('/')  do
-    slim(:start)
-  end 
+  slim(:start)
+end
+
+get('/reviews')
+
+end
+
+get('/reviews/new')
+end
