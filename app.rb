@@ -12,7 +12,7 @@ get('/review') do
   id = session[:id].to_i
   db = SQLite3::Database.new('db/imdb.db')
   db.results_as_hash = true
-  result = db.execute("SELECT * FROM RecensionId WHERE RecensionId = ?",id)
+  result = db.execute("SELECT * FROM recension")
   slim(:"/review/index",locals:{recension:result})
 end
 
@@ -23,7 +23,9 @@ end
 post('/review/new') do
   id = session[:id].to_i
   review = params[:review]
+  title = params[:title]
+  rating = params[:rating]
   db = SQLite3::Database.new('db/imdb.db')
-  db.execute("INSERT INTO recension (Content, RecensionId) VALUES(?,?)",review,id)
+  db.execute("INSERT INTO recension(Content, Title, Rating) VALUES(?,?,?)",review, title, rating)
   redirect('/review')
 end
