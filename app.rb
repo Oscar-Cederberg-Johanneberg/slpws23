@@ -29,3 +29,13 @@ post('/review/new') do
   db.execute("INSERT INTO recension(Content, Title, Rating) VALUES(?,?,?)",review, title, rating)
   redirect('/review')
 end
+
+get('/recension/:id') do
+  id = params[:id].to_i
+  db = SQLite3::Database.new("db/imdb.db")
+  db.results_as_hash = true
+  result = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
+  # result2 = db.execute("SELECT Title FROM recesion WHERE RecensionId IN (SELECT SongId FROM  WHERE AlbumId = ?)",id).first
+  p "resultatet blev #{result2}"
+  slim(:"review/show",locals:{result:result,result2:result2})
+end
