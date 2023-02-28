@@ -30,12 +30,30 @@ post('/review/new') do
   redirect('/review')
 end
 
+get('/recension/:id/edit') do
+  id = params[:id].to_i
+  db = SQLite3::Database.new('db/imdb.db')
+  db.results_as_hash = true
+  result = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
+  slim(:"/review/edit",locals:{result:result})
+end
+
+post('/recension/:id/update') do
+  id = params[:id].to_i
+  title = params[:title]
+  review = params[:review]
+  rating = params[:rating]
+  db = SQLite3::Database.new("db/imdb.db")
+  db.execute("UPDATE recension SET Title=?,SET Review=?,SET RATING=?,Review=?,Rating=? WHERE RecensionId =?",title,review,rating,id)
+  redirect('/albums')
+end
+
 get('/recension/:id') do
   id = params[:id].to_i
   db = SQLite3::Database.new("db/imdb.db")
   db.results_as_hash = true
   result = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
-  # result2 = db.execute("SELECT Title FROM recesion WHERE RecensionId IN (SELECT SongId FROM  WHERE AlbumId = ?)",id).first
-  p "resultatet blev #{result2}"
-  slim(:"review/show",locals:{result:result,result2:result2})
+  # result2 = db.execute("SELECT Content FROM recension WHERE RecensionId IN (SELECT SongId FROM  WHERE AlbumId = ?)",id).first
+  # p "resultatet blev #{result2}"
+  slim(:"review/show",locals:{result:result})
 end
