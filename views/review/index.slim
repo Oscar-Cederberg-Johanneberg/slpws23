@@ -1,11 +1,10 @@
 h2 Alla recensioner #{session[:id]}
 
-
-
 ol
     - recension.each do |recension|
         li 
             a href="recension/#{recension['RecensionId']}" #{recension["Title"]}
+            br/
             a href="recension/#{recension['RecensionId']}/edit" Edit
-            / form method="POST" action="albums/#{album['AlbumId']}/delete"
-            /     input type="submit" value="Radera"  
+            form method="POST" action="recension/#{recension['RecensionId']}/delete"
+                input type="submit" value="Radera"  

@@ -2,7 +2,10 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'slim'
 require 'sqlite3'
-require 'bcrypt'
+# require 'bcrypt'
+require 'sinatra/flash'
+
+enable :sessions
 
 get('/')  do
   slim(:start)
@@ -27,6 +30,7 @@ post('/review/new') do
   rating = params[:rating]
   db = SQLite3::Database.new('db/imdb.db')
   db.execute("INSERT INTO recension(Content, Title, Rating) VALUES(?,?,?)",review, title, rating)
+  flash[:notice] = "Recension Publicerad"
   redirect('/review')
 end
 
@@ -44,9 +48,17 @@ post('/recension/:id/update') do
   review = params[:review]
   rating = params[:rating]
   db = SQLite3::Database.new("db/imdb.db")
-  db.execute("UPDATE recension SET Title=?,SET Review=?,SET RATING=?,Review=?,Rating=? WHERE RecensionId =?",title,review,rating,id)
-  redirect('/albums')
+  db.execute("UPDATE recension SET Title=?, Content=?, Rating=? WHERE RecensionId =?",title,review,rating,id)
+  redirect('/review')
 end
+
+post('/recension/:id/delete') do
+  id = params[:id].to_i
+  db = SQLite3::Database.new("db/imdb.db")
+  db.execute("DELETE FROM recension WHERE RecensionId =?",id)
+  redirect('/review')
+end
+
 
 get('/recension/:id') do
   id = params[:id].to_i

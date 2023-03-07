@@ -1,12 +1,13 @@
-h1 = result
+h1 Resensionen
 
-/ - result.each do |todo|
-/     h2 Låttitel
-/     p = todo ["Title"]
-/     h2 Åsikt
-/     p = todo["Content"]
-/     h2 Rating 0 - 5
-/     p = todo["Rating"]
+b Låttitel
+p #{result["Title"]}
+
+b Texten
+p #{result["Content"]}
+
+b Rating 
+p #{result["Rating"]}
 
 / p Låten som du har sökt efter heter #{result2["Title"]}.
 / p Recensionen som du har sökt efter har id #{result2["RecensionId"]}.
