@@ -15,11 +15,11 @@ background-color: #1e383c;
     position:fixed;
     font-size:4rem;
     font-family:Arial, Helvetica, sans-serif;
-    color: red;
+    color: green;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 1px solid #ff0000;
+    border: 1px solid rgb(0, 128, 0);
     border-radius: 5px;
 }
 
