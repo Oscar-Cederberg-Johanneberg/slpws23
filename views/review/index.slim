@@ -1,10 +1,11 @@
 h2 Alla recensioner #{session[:id]}
 
 ol
-    - recension.each do |recension|
-        li 
-            a href="recension/#{recension['RecensionId']}" #{recension["Title"]}
-            br/
-            a href="recension/#{recension['RecensionId']}/edit" Edit
-            form method="POST" action="recension/#{recension['RecensionId']}/delete"
-                input type="submit" value="Radera"  
+  - recension.each do |recension|
+    li 
+      a href="recension/#{recension['RecensionId']}" #{recension["Title"]}
+      br/
+      a href="recension/#{recension['RecensionId']}/edit" Edit
+      - if recension["UserId"] == session[:id]
+        form method="POST" action="recension/#{recension['RecensionId']}/delete"
+          input type="submit" value="Radera"

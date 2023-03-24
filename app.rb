@@ -21,15 +21,21 @@ post('/login') do
   db = SQLite3::Database.new('db/imdb.db')
   db.results_as_hash = true
   result = db.execute("SELECT * FROM users WHERE username = ?",username).first
-  pwdigest = result["pwdigest"]
-  id = result["id"]
+  if result
+    pwdigest = result["pwdigest"]
+    id = result["id"]
 
-  if BCrypt::Password.new(pwdigest) == password
-    session[:id] = id
-    flash[:notice] = "Inloggning Lyckades"
-    redirect('/review')
+    if BCrypt::Password.new(pwdigest) == password
+      session[:id] = id
+      flash[:notice] = "Inloggning Lyckades"
+      redirect('/review')
+    else
+      flash[:notice] = "Användarnamnet är rätt, men det är fel lösenord"
+      redirect('/showlogin')
+    end
   else
-    "Användarnamnet är rätt, men det är fel lösenord"
+    flash[:notice] = "Användarnamnet finns inte"
+    redirect('/showlogin')
   end
 end
 
@@ -67,12 +73,12 @@ get('/review/new') do
 end
 
 post('/review/new') do
-  id = session[:id].to_i
+  user_id = session[:id].to_i
   review = params[:review]
   title = params[:title]
   rating = params[:rating]
   db = SQLite3::Database.new('db/imdb.db')
-  db.execute("INSERT INTO recension(Content, Title, Rating) VALUES(?,?,?)",review, title, rating)
+  db.execute("INSERT INTO recension(Content, Title, Rating, User_Id) VALUES(?,?,?,?)", review, title, rating, user_id)
   flash[:notice] = "Recension Publicerad"
   redirect('/review')
 end
@@ -97,11 +103,20 @@ end
 
 post('/recension/:id/delete') do
   id = params[:id].to_i
+  user_id = session[:id].to_i
   db = SQLite3::Database.new("db/imdb.db")
-  db.execute("DELETE FROM recension WHERE RecensionId =?",id)
-  redirect('/review')
-end
+  db.results_as_hash = true
+  result = db.execute("SELECT * FROM recension WHERE RecensionId = ?", id).first
 
+  if result["User_Id"] == user_id
+    db.execute("DELETE FROM recension WHERE RecensionId =?", id)
+    flash[:notice] = "Recension Deleted"
+    redirect('/review')
+  else
+    flash[:error] = "You do not have permission to delete this review"
+    redirect("/recension/#{id}")
+  end
+end
 
 get('/recension/:id') do
   id = params[:id].to_i
