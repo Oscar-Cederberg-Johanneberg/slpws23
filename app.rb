@@ -78,7 +78,7 @@ post('/review/new') do
   title = params[:title]
   rating = params[:rating]
   db = SQLite3::Database.new('db/imdb.db')
-  db.execute("INSERT INTO recension(Content, Title, Rating, User_Id) VALUES(?,?,?,?)", review, title, rating, user_id)
+  db.execute("INSERT INTO recension(Content, Title, Rating, UserId) VALUES(?,?,?,?)", review, title, rating, user_id)
   flash[:notice] = "Recension Publicerad"
   redirect('/review')
 end
@@ -108,7 +108,7 @@ post('/recension/:id/delete') do
   db.results_as_hash = true
   result = db.execute("SELECT * FROM recension WHERE RecensionId = ?", id).first
 
-  if result["User_Id"] == user_id
+  if result["UserId"] == user_id
     db.execute("DELETE FROM recension WHERE RecensionId =?", id)
     flash[:notice] = "Recension Deleted"
     redirect('/review')
