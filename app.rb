@@ -37,6 +37,14 @@ post('/login') do
     flash[:notice] = "Användarnamnet finns inte"
     redirect('/showlogin')
   end
+    # #######################################
+    if BCrypt::Password.new(pwdigest) == password
+      session[:id] = id
+      puts "Session set: #{session[:id]}" # Add this line for debugging
+      flash[:notice] = "Inloggning Lyckades"
+      redirect('/review')
+    # #######################################
+    end
 end
 
 get('/register') do
@@ -69,19 +77,39 @@ get('/review') do
 end
 
 get('/review/new') do
-  slim(:"review/new")
+  ############################
+  puts "Session in review/new: #{session[:id]}" # Add this line for debugging
+  if session[:id]
+    slim(:"review/new")
+  else
+    flash[:notice] = "Du måste vara inloggad för att skapa en recension"
+    redirect('/showlogin')
+  end
+  ###########################
+  if session[:id]
+    slim(:"review/new")
+  else
+    flash[:notice] = "Du måste vara inloggad för att skapa en recension"
+    redirect('/showlogin')
+  end
 end
 
 post('/review/new') do
-  user_id = session[:id].to_i
-  review = params[:review]
-  title = params[:title]
-  rating = params[:rating]
-  db = SQLite3::Database.new('db/imdb.db')
-  db.execute("INSERT INTO recension(Content, Title, Rating, UserId) VALUES(?,?,?,?)", review, title, rating, user_id)
-  flash[:notice] = "Recension Publicerad"
-  redirect('/review')
+  if session[:id]
+    user_id = session[:id].to_i
+    review = params[:review]
+    title = params[:title]
+    rating = params[:rating]
+    db = SQLite3::Database.new('db/imdb.db')
+    db.execute("INSERT INTO recension(Content, Title, Rating, User_Id) VALUES(?,?,?,?)", review, title, rating, user_id)
+    flash[:notice] = "Recension Publicerad"
+    redirect('/review')
+  else
+    flash[:notice] = "Du måste vara inloggad för att skapa en recension"
+    redirect('/showlogin')
+  end
 end
+
 
 get('/recension/:id/edit') do
   id = params[:id].to_i
