@@ -21,12 +21,14 @@ post('/login') do
   db = SQLite3::Database.new('db/imdb.db')
   db.results_as_hash = true
   result = db.execute("SELECT * FROM users WHERE username = ?",username).first
+
   if result
     pwdigest = result["pwdigest"]
-    id = result["id"]
+    id = result["UserId"]
 
     if BCrypt::Password.new(pwdigest) == password
-      session[:id] = id
+      session[:user_id] = id
+      puts "Session set after login: #{session.inspect}" # Add this line for debugging
       flash[:notice] = "Inloggning Lyckades"
       redirect('/review')
     else
@@ -37,14 +39,6 @@ post('/login') do
     flash[:notice] = "Användarnamnet finns inte"
     redirect('/showlogin')
   end
-    # #######################################
-    if BCrypt::Password.new(pwdigest) == password
-      session[:id] = id
-      puts "Session set: #{session[:id]}" # Add this line for debugging
-      flash[:notice] = "Inloggning Lyckades"
-      redirect('/review')
-    # #######################################
-    end
 end
 
 get('/register') do
@@ -77,16 +71,10 @@ get('/review') do
 end
 
 get('/review/new') do
-  ############################
-  puts "Session in review/new: #{session[:id]}" # Add this line for debugging
-  if session[:id]
-    slim(:"review/new")
-  else
-    flash[:notice] = "Du måste vara inloggad för att skapa en recension"
-    redirect('/showlogin')
-  end
-  ###########################
-  if session[:id]
+  puts "Session in review/new: #{session[:id]}" # Debugging
+  puts "Session object: #{session.inspect}" # Debugging
+  
+  if session[:user_id]
     slim(:"review/new")
   else
     flash[:notice] = "Du måste vara inloggad för att skapa en recension"
@@ -95,21 +83,17 @@ get('/review/new') do
 end
 
 post('/review/new') do
-  if session[:id]
-    user_id = session[:id].to_i
-    review = params[:review]
-    title = params[:title]
-    rating = params[:rating]
-    db = SQLite3::Database.new('db/imdb.db')
-    db.execute("INSERT INTO recension(Content, Title, Rating, User_Id) VALUES(?,?,?,?)", review, title, rating, user_id)
-    flash[:notice] = "Recension Publicerad"
-    redirect('/review')
-  else
-    flash[:notice] = "Du måste vara inloggad för att skapa en recension"
-    redirect('/showlogin')
-  end
+  user_id = session[:user_id].to_i
+  puts "Siffran är #{user_id}"
+  review = params[:review]
+  title = params[:title]
+  rating = params[:rating]
+  db = SQLite3::Database.new('db/imdb.db')
+  db.execute("INSERT INTO recension(Content, Title, Rating, UserId) VALUES(?,?,?,?)", review, title, rating, user_id)
+  puts "Review submitted" # Debugging
+  flash[:notice] = "Recension Publicerad"
+  redirect('/review')
 end
-
 
 get('/recension/:id/edit') do
   id = params[:id].to_i
@@ -130,20 +114,12 @@ post('/recension/:id/update') do
 end
 
 post('/recension/:id/delete') do
-  id = params[:id].to_i
-  user_id = session[:id].to_i
-  db = SQLite3::Database.new("db/imdb.db")
-  db.results_as_hash = true
-  result = db.execute("SELECT * FROM recension WHERE RecensionId = ?", id).first
-
-  if result["UserId"] == user_id
-    db.execute("DELETE FROM recension WHERE RecensionId =?", id)
-    flash[:notice] = "Recension Deleted"
-    redirect('/review')
-  else
-    flash[:error] = "You do not have permission to delete this review"
-    redirect("/recension/#{id}")
-  end
+review_id = params[:id].to_i
+user_id = session[:UserId].to_i
+db = SQLite3::Database.new('db/imdb.db')
+db.execute("DELETE FROM recension WHERE RecensionId = ?", review_id)
+flash[:notice] = "Recension raderad"
+redirect('/review')
 end
 
 get('/recension/:id') do
@@ -151,7 +127,6 @@ get('/recension/:id') do
   db = SQLite3::Database.new("db/imdb.db")
   db.results_as_hash = true
   result = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
-  # result2 = db.execute("SELECT Content FROM recension WHERE RecensionId IN (SELECT SongId FROM  WHERE AlbumId = ?)",id).first
-  # p "resultatet blev #{result2}"
-  slim(:"review/show",locals:{result:result})
+  user = db.execute("SELECT * FROM users WHERE UserId = ?", result["UserId"]).first
+  slim(:"review/show", locals: {result: result, user: user})
 end

@@ -1,10 +1,13 @@
-h1 Resensionen
-
-b Låttitel
-p #{result["Title"]}
-
-b Texten
-p #{result["Content"]}
-
-b Rating 
-p #{result["Rating"]}
+div.container
+    div.item
+        h2 Låttitel
+        h3 #{result["Title"]}
+    div.item
+        h2 Recension
+        h3 #{result["Content"]}
+    div.item
+        h2 Rating
+        h3 #{result["Rating"]} av 5
+    div.item
+        h2 Publicerad av
+        h3 #{user["Username"]}

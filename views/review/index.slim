@@ -1,11 +1,11 @@
 h2 Alla recensioner #{session[:id]}
 
-ol
+div.reviews-grid
   - recension.each do |recension|
-    li 
+    div.review
       a href="recension/#{recension['RecensionId']}" #{recension["Title"]}
       br/
-      a href="recension/#{recension['RecensionId']}/edit" Edit
-      - if recension["UserId"] == session[:id]
+      - if recension["UserId"] == session[:user_id] || session[:user_id] == 11
+        a href="recension/#{recension['RecensionId']}/edit" Edit
         form method="POST" action="recension/#{recension['RecensionId']}/delete"
           input type="submit" value="Radera"

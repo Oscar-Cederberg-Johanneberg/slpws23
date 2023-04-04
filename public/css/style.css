@@ -75,6 +75,42 @@ nav a:hover {
     transition: ease 0.4s;
 }
 
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 1rem;
+}
+  
+.review {
+    padding: 1rem;
+    border: 1px solid #47646f;
+    border-radius: 4px;
+    text-align: center;
+    margin:1rem;
+    font-size: 1.5625rem;
+}  
+
+.review a {
+    color: #f6f8fa; /* Change this to your desired color, e.g., black */
+    text-decoration: none; /* Removes the underline from the links */
+}
+  
+.review a:hover {
+    color: #47646f; /* Change this to your desired hover color */
+    text-decoration: underline; /* Adds an underline when the link is hovered */
+}  
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.item {
+  flex: 1;
+  margin-right: 1em;
+}
+
 #grid_wrapper {
     display: grid;
     grid-template-columns: minmax(200px, 1fr) 200px;
