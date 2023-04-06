@@ -1,8 +1,41 @@
-h2 Skriv en recension
+.container
+  .form-wrapper
+    h2 Skriv en recension
 
-form action="/review/new" method="post"
-    input type="text" name="title" placeholder="Vilken låt vill du recensera?"
-    input type="text" name="review" placeholder="Vad tyckte du om låten?"
-    label for="rating" Rate mellan 0 - 5
-    input type="number" name="rating" min="0" max="5" 
-    input type="submit" value="Publicera"
+    form action="/review/new" method="post"
+      .form-group
+        label for="title" Låttitel
+        input type="text" name="title" placeholder="Vilken låt vill du recensera?"
+
+      .form-group
+        label for="review" Recension
+        textarea name="review" rows="6" cols="40" placeholder="Vad tyckte du om låten?"
+
+      .form-group
+        label for="rating" Rate mellan 0 - 5
+        input type="number" name="rating" min="0" max="5"
+
+      .form-group
+        h2 Genres
+        - genres.each do |genre|
+          br
+          input type="checkbox" name="genres[]" value="#{genre['GenreId']}" id="genre_#{genre['GenreId']}"
+          label for="genre_#{genre['GenreId']}" #{genre['Name']}
+
+      .form-group
+        input type="submit" value="Publicera"
+
+/ h2 Skriv en recension
+
+/ form action="/review/new" method="post"
+/   input type="text" name="title" placeholder="Vilken låt vill du recensera?"
+/   input type="text" name="review" placeholder="Vad tyckte du om låten?"
+/   label for="rating" Rate mellan 0 - 5
+/   input type="number" name="rating" min="0" max="5"
+
+/   - genres.each do |genre|
+/     input type="checkbox" name="genres[]" value="#{genre['GenreId']}" id="genre_#{genre['GenreId']}"
+/     label for="genre_#{genre['GenreId']}" #{genre['Name']}
+/     br/
+
+/   input type="submit" value="Publicera"

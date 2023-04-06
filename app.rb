@@ -75,7 +75,10 @@ get('/review/new') do
   puts "Session object: #{session.inspect}" # Debugging
   
   if session[:user_id]
-    slim(:"review/new")
+    db = SQLite3::Database.new('db/imdb.db')
+    db.results_as_hash = true
+    genres = db.execute("SELECT * FROM genres")
+    slim(:"review/new", locals: {genres: genres})
   else
     flash[:notice] = "Du måste vara inloggad för att skapa en recension"
     redirect('/showlogin')
@@ -84,15 +87,29 @@ end
 
 post('/review/new') do
   user_id = session[:user_id].to_i
-  puts "Siffran är #{user_id}"
   review = params[:review]
   title = params[:title]
   rating = params[:rating]
-  db = SQLite3::Database.new('db/imdb.db')
-  db.execute("INSERT INTO recension(Content, Title, Rating, UserId) VALUES(?,?,?,?)", review, title, rating, user_id)
-  puts "Review submitted" # Debugging
-  flash[:notice] = "Recension Publicerad"
-  redirect('/review')
+  genres = params[:genres]
+
+  if title.strip.empty? || review.strip.empty? || rating.nil? || rating.strip.empty?
+    flash[:notice] = "Kontrollera så att alla fält är ifyllda!"
+    redirect('/review/new')
+  elsif genres.nil? || genres.empty?
+    flash[:notice] = "Välj minst en genre!"
+    redirect('/review/new')
+  else
+    db = SQLite3::Database.new('db/imdb.db')
+    db.execute("INSERT INTO recension(Content, Title, Rating, UserId) VALUES(?,?,?,?)", review, title, rating, user_id)
+    recension_id = db.last_insert_row_id
+
+    genres.each do |genre_id|
+      db.execute("INSERT INTO recension_genre_rel (RecensionId, GenreId) VALUES (?, ?)", recension_id, genre_id)
+  
+    end
+    flash[:notice] = "Recension Publicerad"
+    redirect('/review')
+  end
 end
 
 get('/recension/:id/edit') do
@@ -100,7 +117,9 @@ get('/recension/:id/edit') do
   db = SQLite3::Database.new('db/imdb.db')
   db.results_as_hash = true
   result = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
-  slim(:"/review/edit",locals:{result:result})
+  genres = db.execute("SELECT * FROM genres")
+  selected_genres = db.execute("SELECT GenreId FROM recension_genre_rel WHERE RecensionId = ?", id).flatten
+  slim(:"review/edit", locals: {result: result, genres: genres, selected_genres: selected_genres})
 end
 
 post('/recension/:id/update') do
@@ -108,18 +127,24 @@ post('/recension/:id/update') do
   title = params[:title]
   review = params[:review]
   rating = params[:rating]
-  db = SQLite3::Database.new("db/imdb.db")
-  db.execute("UPDATE recension SET Title=?, Content=?, Rating=? WHERE RecensionId =?",title,review,rating,id)
-  redirect('/review')
+  genres = params[:genres]
+  if title.strip.empty? || review.strip.empty? || rating.nil? || rating.strip.empty? || genres.nil? || genres.empty?
+    flash[:notice] = "Alla fält måste fyllas i och minst en genre måste väljas."
+    redirect back
+  else
+    db = SQLite3::Database.new("db/imdb.db")
+    db.execute("UPDATE recension SET Title=?, Content=?, Rating=? WHERE RecensionId =?",title,review,rating,id)
+    redirect('/review')
+  end
 end
 
 post('/recension/:id/delete') do
-review_id = params[:id].to_i
-user_id = session[:UserId].to_i
-db = SQLite3::Database.new('db/imdb.db')
-db.execute("DELETE FROM recension WHERE RecensionId = ?", review_id)
-flash[:notice] = "Recension raderad"
-redirect('/review')
+  review_id = params[:id].to_i
+  user_id = session[:UserId].to_i
+  db = SQLite3::Database.new('db/imdb.db')
+  db.execute("DELETE FROM recension WHERE RecensionId = ?", review_id)
+  flash[:notice] = "Recension raderad"
+  redirect('/review')
 end
 
 get('/recension/:id') do
@@ -128,5 +153,6 @@ get('/recension/:id') do
   db.results_as_hash = true
   result = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
   user = db.execute("SELECT * FROM users WHERE UserId = ?", result["UserId"]).first
-  slim(:"review/show", locals: {result: result, user: user})
+  genres = db.execute("SELECT g.* FROM genres g INNER JOIN recension_genre_rel rgr ON g.GenreId = rgr.GenreId WHERE rgr.RecensionId = ?", id)
+  slim(:"review/show", locals: {result: result, user: user, genres: genres})
 end

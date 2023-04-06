@@ -1,8 +1,36 @@
-h2 Redigera din recension:
+.container
+  .form-wrapper
+    h2 Redigera din recension
 
-form action="/recension/#{result['RecensionId']}/update" method="post"
-    input type="text" name="title" value="#{result['Title']}"
-    input type="text" name="review" value="#{result['review']}" placeholder="Vad tyckte du om låten?"
-    label for="rating" Ändra din rating mellan 0 - 5
-    input type="number" name="rating" min="0" max="5" 
-    input type="submit" value="Redigera Recensionen"
+    form action="/recension/#{result['RecensionId']}/update" method="post"
+      .form-group
+        label for="title" Låttitel
+        input type="text" name="title" value="#{result['Title']}"
+
+      .form-group
+        label for="review" Recension
+        textarea name="review" rows="6" cols="40" placeholder="Vad tyckte du om låten?"
+            | #{result['Content']}
+
+      .form-group
+        label for="rating" Ändra din rating mellan 0 - 5
+        input type="number" name="rating" min="0" max="5" value="#{result['Rating']}"
+
+      .form-group
+        label Genres
+        - genres.each do |genre|
+          input type="checkbox" name="genres[]" value="#{genre['GenreId']}" id="genre_#{genre['GenreId']}" checked?="#{genre['selected'] ? true : false}"
+          label for="genre_#{genre['GenreId']}" #{genre['Name']}
+          br/
+
+      .form-group
+        input type="submit" value="Redigera Recensionen"
+
+/ h2 Redigera din recension:
+
+/ form action="/recension/#{result['RecensionId']}/update" method="post"
+/     input type="text" name="title" value="#{result['Title']}"
+/     input type="text" name="review" value="#{result['review']}" placeholder="Vad tyckte du om låten?"
+/     label for="rating" Ändra din rating mellan 0 - 5
+/     input type="number" name="rating" min="0" max="5" 
+/     input type="submit" value="Redigera Recensionen"

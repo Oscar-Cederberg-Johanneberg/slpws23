@@ -1,4 +1,4 @@
-div.container
+div.kontainer
     div.item
         h2 Låttitel
         h3 #{result["Title"]}
@@ -8,6 +8,10 @@ div.container
     div.item
         h2 Rating
         h3 #{result["Rating"]} av 5
+    div.item
+        h2 Genres
+        - genres.each do |genre|
+            h3 #{genre["Name"]}
     div.item
         h2 Publicerad av
         h3 #{user["Username"]}

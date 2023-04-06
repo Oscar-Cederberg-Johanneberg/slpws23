@@ -100,7 +100,7 @@ nav a:hover {
     text-decoration: underline; /* Adds an underline when the link is hovered */
 }  
 
-.container {
+.kontainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -152,6 +152,111 @@ a:active {
     text-decoration: none;
 }
 
+  
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+    }
+    
+    .form-wrapper {
+        width: 100%;
+        max-width: 400px;
+        background-color: #f0f0f0;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        width: 100%;
+    }
+    
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }  
+
+/*  */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+  background-color: #f0f0f0;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/*  */
+
 @media screen and (min-width: 800px) {
     
     p{
@@ -184,5 +289,4 @@ a:active {
         width: 80vw;
         margin-top: 6.25rem;
     }
-
 }
