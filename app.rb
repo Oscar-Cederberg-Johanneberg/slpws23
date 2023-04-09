@@ -28,7 +28,6 @@ post('/login') do
 
     if BCrypt::Password.new(pwdigest) == password
       session[:user_id] = id
-      puts "Session set after login: #{session.inspect}" # Add this line for debugging
       flash[:notice] = "Inloggning Lyckades"
       redirect('/review')
     else
@@ -51,7 +50,6 @@ post('/users/new') do
   password_confirm = params[:password_confirm]
 
   if (password == password_confirm)
-    #skapa en ny användare
     password_digest = BCrypt::Password.create(password)
     db = SQLite3::Database.new('db/imdb.db')
     db.execute("INSERT INTO users (Username,pwdigest) VALUES (?,?)",username,password_digest)
@@ -71,9 +69,6 @@ get('/review') do
 end
 
 get('/review/new') do
-  puts "Session in review/new: #{session[:id]}" # Debugging
-  puts "Session object: #{session.inspect}" # Debugging
-  
   if session[:user_id]
     db = SQLite3::Database.new('db/imdb.db')
     db.results_as_hash = true
