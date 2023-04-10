@@ -56,7 +56,8 @@ post('/users/new') do
     flash[:notice] = "Lyckad Registrering"
     redirect('/showlogin')
   else
-    "Lösenorden var inte samma, skriv igen"
+    flash[:notice] = "Lösenorden var inte samma, skriv igen"
+    redirect('/register')
   end
 end
 

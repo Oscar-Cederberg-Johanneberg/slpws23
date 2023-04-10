@@ -17,7 +17,7 @@
         input type="number" name="rating" min="0" max="5" value="#{result['Rating']}"
 
       .form-group
-        label Genres
+        h2 Genres
         - genres.each do |genre|
           input type="checkbox" name="genres[]" value="#{genre['GenreId']}" id="genre_#{genre['GenreId']}" checked?="#{genre['selected'] ? true : false}"
           label for="genre_#{genre['GenreId']}" #{genre['Name']}
