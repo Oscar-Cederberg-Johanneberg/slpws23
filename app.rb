@@ -4,6 +4,7 @@ require 'slim'
 require 'sqlite3'
 require 'bcrypt'
 require 'sinatra/flash'
+require_relative './model.rb'
 
 enable :sessions
 
