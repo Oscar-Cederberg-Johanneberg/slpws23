@@ -1,2 +1,1 @@
-def connect_to_db(path)
-  
+# def connect_to_db(path)

@@ -113,10 +113,16 @@ get('/recension/:id/edit') do
   id = params[:id].to_i
   db = SQLite3::Database.new('db/imdb.db')
   db.results_as_hash = true
-  result = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
-  genres = db.execute("SELECT * FROM genres")
-  selected_genres = db.execute("SELECT GenreId FROM recension_genre_rel WHERE RecensionId = ?", id).flatten
-  slim(:"review/edit", locals: {result: result, genres: genres, selected_genres: selected_genres})
+  user = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
+  if session[:user_id] == user["UserId"] || session[:user_id] == 11
+    result = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
+    genres = db.execute("SELECT * FROM genres")
+    selected_genres = db.execute("SELECT GenreId FROM recension_genre_rel WHERE RecensionId = ?", id).flatten
+    slim(:"review/edit", locals: {result: result, genres: genres, selected_genres: selected_genres})
+  else
+    flash[:notice] = "Du kan endast redigera dina egna recensioner"
+    redirect('/review')
+  end
 end
 
 post('/recension/:id/update') do
@@ -125,12 +131,18 @@ post('/recension/:id/update') do
   review = params[:review]
   rating = params[:rating]
   genres = params[:genres]
-  if title.strip.empty? || review.strip.empty? || rating.nil? || rating.strip.empty? || genres.nil? || genres.empty?
-    flash[:notice] = "Alla fält måste fyllas i och minst en genre måste väljas."
-    redirect back
+  user = db.execute("SELECT * FROM recension WHERE RecensionId = ?",id).first
+  if session[:user_id] == user["UserId"] || session[:user_id] == 11
+    if title.strip.empty? || review.strip.empty? || rating.nil? || rating.strip.empty? || genres.nil? || genres.empty?
+      flash[:notice] = "Alla fält måste fyllas i och minst en genre måste väljas."
+      redirect back
+    else
+      db = SQLite3::Database.new("db/imdb.db")
+      db.execute("UPDATE recension SET Title=?, Content=?, Rating=? WHERE RecensionId =?",title,review,rating,id)
+      redirect('/review')
+    end
   else
-    db = SQLite3::Database.new("db/imdb.db")
-    db.execute("UPDATE recension SET Title=?, Content=?, Rating=? WHERE RecensionId =?",title,review,rating,id)
+    flash[:notice] = "Du kan endast redigera dina egna recensioner"
     redirect('/review')
   end
 end
