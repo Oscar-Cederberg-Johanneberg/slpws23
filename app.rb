@@ -126,6 +126,8 @@ get('/recension/:id/edit') do
 end
 
 post('/recension/:id/update') do
+  db = SQLite3::Database.new("db/imdb.db")
+  db.results_as_hash = true
   id = params[:id].to_i
   title = params[:title]
   review = params[:review]
@@ -137,7 +139,6 @@ post('/recension/:id/update') do
       flash[:notice] = "Alla fält måste fyllas i och minst en genre måste väljas."
       redirect back
     else
-      db = SQLite3::Database.new("db/imdb.db")
       db.execute("UPDATE recension SET Title=?, Content=?, Rating=? WHERE RecensionId =?",title,review,rating,id)
       redirect('/review')
     end
